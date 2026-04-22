@@ -1,20 +1,23 @@
-import Logo from "../common/Logo";
-import SearchBar from "../common/SearchBar";
-import CartIcon from "../common/CartIcon";
-function Navbar() {
+// src/components/layout/Navbar.jsx
+import { Link } from "react-router-dom";
+
+function Navbar({ cartCount }) {
   return (
     <div style={{
       display: "flex",
       justifyContent: "space-between",
-      alignItems: "center",
-      padding: "15px 25px",
-      borderBottom: "2px solid #ccc"
+      padding: "10px 20px",
+      borderBottom: "1px solid #ccc"
     }}>
-      
-      <Logo />
-      <SearchBar />
-      <CartIcon />
+      <h2>MyStore</h2>
 
+      <Link to="/">
+        <button>Home</button>
+      </Link>
+
+      <Link to="/cart">
+        <p>Cart ({cartCount})</p>
+      </Link>
     </div>
   );
 }

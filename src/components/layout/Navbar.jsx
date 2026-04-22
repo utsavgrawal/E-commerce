@@ -1,3 +1,6 @@
+import Logo from "../common/Logo";
+import SearchBar from "../common/SearchBar";
+import CartIcon from "../common/CartIcon";
 function Navbar() {
   return (
     <div style={{
@@ -8,15 +11,9 @@ function Navbar() {
       borderBottom: "2px solid #ccc"
     }}>
       
-      <h2>MyDukkan</h2>
-
-      <input 
-        type="text" 
-        placeholder="Samaan Dhundlo" 
-        style={{ padding: "10px", width: "200px" }}
-      />
-
-      <p>Cart (0)</p>
+      <Logo />
+      <SearchBar />
+      <CartIcon />
 
     </div>
   );

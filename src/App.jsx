@@ -1,21 +1,15 @@
-// src/App.jsx
-import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+
 import Navbar from "./components/layout/Navbar";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
+import Wishlist from "./pages/Wishlist";
 import ProductDetail from "./pages/ProductDetail";
 
-
 function App() {
-  const [cartItems, setCartItems] = useState(() => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
+  const [cartItems, setCartItems] = useState([]);
+  const [wishlistItems, setWishlistItems] = useState([]);
 
   const totalItems = cartItems.reduce(
     (acc, item) => acc + item.quantity,
@@ -24,23 +18,48 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar cartCount={totalItems} />
+      <Navbar
+        cartCount={totalItems}
+        wishlistCount={wishlistItems.length}
+      />
+
       <Routes>
         <Route
           path="/"
-          element={<Home setCartItems={setCartItems} />}
+          element={
+            <Home
+              setCartItems={setCartItems}
+              wishlistItems={wishlistItems}
+              setWishlistItems={setWishlistItems}
+            />
+          }
         />
-        <Route
-  path="/product/:id"
-  element={
-    <ProductDetail setCartItems={setCartItems} />
-  }
-/>
+
         <Route
           path="/cart"
           element={
             <Cart
               cartItems={cartItems}
+              setCartItems={setCartItems}
+            />
+          }
+        />
+
+        <Route
+          path="/wishlist"
+          element={
+            <Wishlist
+              wishlistItems={wishlistItems}
+              setWishlistItems={setWishlistItems}
+            />
+          }
+        />
+
+        {/* 🔥 IMPORTANT */}
+        <Route
+          path="/product/:id"
+          element={
+            <ProductDetail
               setCartItems={setCartItems}
             />
           }

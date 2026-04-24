@@ -1,52 +1,76 @@
-// src/pages/Home.jsx
 import { useState, useEffect } from "react";
 import ProductCard from "../components/common/ProductCard";
 
-function Home({ setCartItems }) {
+function Home({ setCartItems, wishlistItems, setWishlistItems }) {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // API fetch
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then(res => res.json())
-      .then(data => setProducts(data));
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch("https://fakestoreapi.com/products");
+        const data = await res.json();
+
+        setProducts(data);
+      } catch (err) {
+        setError("Failed to load");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // filter
-  const filteredProducts = products.filter((item) =>
+  if (loading) return <h2>Loading...</h2>;
+  if (error) return <h2>{error}</h2>;
+
+  const filtered = products.filter((item) =>
     item.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
-    <div>
-      {/* Search */}
-      <div style={{ padding: "20px" }}>
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+ return (
+  <div style={{ padding: "30px" }}>
 
-      {/* Products */}
-      <div style={{
+    <input
+      placeholder="Search products..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      style={{
+        padding: "12px",
+        width: "100%",
+        maxWidth: "400px",
+        marginBottom: "25px",
+        borderRadius: "8px",
+        border: "1px solid #ccc"
+      }}
+    />
+
+    <div
+      style={{
         display: "flex",
         flexWrap: "wrap",
-        gap: "20px",
-        padding: "20px"
-      }}>
-        {filteredProducts.map((item) => (
-          <ProductCard
-            key={item.id}
-            product={item}
-            setCartItems={setCartItems}
-          />
-        ))}
-      </div>
+        gap: "25px",
+        justifyContent: "center"
+      }}
+    >
+      {filtered.map((item) => (
+        <ProductCard
+          key={item.id}
+          product={item}
+          setCartItems={setCartItems}
+          wishlistItems={wishlistItems}
+          setWishlistItems={setWishlistItems}
+        />
+      ))}
     </div>
-  );
+
+  </div>
+);
 }
 
 export default Home;

@@ -1,24 +1,27 @@
-// src/components/layout/Navbar.jsx
 import { Link } from "react-router-dom";
 
-function Navbar({ cartCount }) {
+function Navbar({ cartCount, wishlistCount }) {
   return (
-    <div style={{
-      display: "flex",
-      justifyContent: "space-between",
-      padding: "10px 20px",
-      borderBottom: "1px solid #ccc"
-    }}>
-      <h2>MyStore</h2>
+   <div style={{
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "15px 30px",
+  backgroundColor: "#111",
+  color: "#fff"
+}}>
+  <h2>MyStore</h2>
 
-      <Link to="/">
-        <button>Home</button>
-      </Link>
+  <div style={{ display: "flex", gap: "25px" }}>
+    <Link to="/wishlist" style={{ color: "#fff" }}>
+      ❤️ {wishlistCount}
+    </Link>
 
-      <Link to="/cart">
-        <p>Cart ({cartCount})</p>
-      </Link>
-    </div>
+    <Link to="/cart" style={{ color: "#fff" }}>
+      🛒 {cartCount}
+    </Link>
+  </div>
+</div>
   );
 }
 

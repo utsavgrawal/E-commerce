@@ -2,21 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🔥 GLOBAL THEME */
+/* 🌙 GLOBAL RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 🎨 BODY THEME */
 body {
-  @apply bg-black text-white;
+  background-color: #000;
+  color: #fff;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* buttons */
-.btn-primary {
-  @apply bg-gradient-to-r from-pink-500 to-red-500 text-white px-4 py-2 rounded hover:scale-105 transition;
+/* 🔥 SMOOTH SCROLL */
+html {
+  scroll-behavior: smooth;
 }
 
-.btn-secondary {
-  @apply bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition;
+/* ✨ BUTTON DEFAULT */
+button {
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* cards */
-.card {
-  @apply bg-gray-900 rounded-xl shadow-lg hover:shadow-pink-500/20 transition;
+/* 🚀 HOVER EFFECT */
+button:hover {
+  transform: scale(1.03);
+}
+
+/* 📦 IMAGE FIX */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* 🔤 TEXT SELECTION */
+::selection {
+  background: #ec4899;
+  color: white;
+}
+
+/* 🧊 SCROLLBAR (optional premium feel) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ec4899;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #db2777;
 }

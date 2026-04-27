@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/common/ProductCard";
+import SearchBar from "../components/common/SearchBar";
+import { motion } from "framer-motion";
 
 function Home({ setCartItems, wishlistItems, setWishlistItems }) {
   const [products, setProducts] = useState([]);
@@ -7,7 +9,7 @@ function Home({ setCartItems, wishlistItems, setWishlistItems }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 📦 Fetch products
+  // 📦 FETCH PRODUCTS
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then(res => res.json())
@@ -21,61 +23,75 @@ function Home({ setCartItems, wishlistItems, setWishlistItems }) {
       });
   }, []);
 
-  // 🔍 Filter
+  // 🔍 FILTER
   const filteredProducts = products.filter(p =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  // ⏳ Loading UI
+  // ⏳ LOADING UI
   if (loading) {
     return (
-      <div className="p-6 text-center text-gray-300">
-        Loading products...
+      <div className="p-10 text-center text-gray-400 animate-pulse">
+        Loading amazing products...
       </div>
     );
   }
 
-  // ❌ Error UI
+  // ❌ ERROR UI
   if (error) {
     return (
-      <div className="p-6 text-center text-red-400">
+      <div className="p-10 text-center text-red-400">
         {error}
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="p-6 max-w-7xl mx-auto"
+    >
 
-      {/* 🔍 Search */}
-      <input
-        type="text"
-        placeholder="Search products..."
-        className="w-full p-3 mb-6 bg-gray-900 border border-gray-700 rounded text-white"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {/* 🔥 HEADER */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-white mb-2">
+          Explore Products 🔥
+        </h1>
+        <p className="text-gray-400">
+          Find the best deals across categories
+        </p>
+      </div>
 
-      {/* 📦 Products */}
+      {/* 🔍 SEARCH */}
+      <SearchBar onSearch={setSearch} />
+
+      {/* 📦 PRODUCTS */}
       {filteredProducts.length === 0 ? (
-        <div className="text-center text-gray-400">
+        <div className="text-center text-gray-400 mt-10">
           No products found 😢
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {filteredProducts.map(product => (
-            <ProductCard
+            <motion.div
               key={product.id}
-              product={product}
-              setCartItems={setCartItems}
-              wishlistItems={wishlistItems}
-              setWishlistItems={setWishlistItems}
-            />
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ProductCard
+                product={product}
+                setCartItems={setCartItems}
+                wishlistItems={wishlistItems}
+                setWishlistItems={setWishlistItems}
+              />
+            </motion.div>
           ))}
         </div>
       )}
 
-    </div>
+    </motion.div>
   );
 }
 

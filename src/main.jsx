@@ -6,8 +6,21 @@ import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <Toaster position="top-right" />
-    <App />
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      {/* 🔔 Toast notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#111",
+            color: "#fff",
+          },
+        }}
+      />
+
+      {/* 🚀 Main App */}
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );

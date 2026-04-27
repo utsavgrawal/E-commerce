@@ -1,119 +1,62 @@
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
-function ProductCard({
-  product,
-  setCartItems,
-  wishlistItems = [],   // ✅ default value (important)
-  setWishlistItems
-}) {
+function ProductCard({ product, setCartItems, wishlistItems, setWishlistItems }) {
   const navigate = useNavigate();
-
-  const goToDetail = () => {
-    navigate(`/product/${product.id}`);
-  };
 
   const addToCart = (e) => {
     e.stopPropagation();
 
-    setCartItems((prev) => {
-      const exist = prev.find((i) => i.id === product.id);
-
+    setCartItems(prev => {
+      const exist = prev.find(i => i.id === product.id);
       if (exist) {
-        return prev.map((i) =>
+        return prev.map(i =>
           i.id === product.id
             ? { ...i, quantity: i.quantity + 1 }
             : i
         );
       }
-
       return [...prev, { ...product, quantity: 1 }];
     });
+
+    toast.success("Added to cart 🛒");
   };
 
-  const isWish = wishlistItems.some(
-    (i) => i.id === product.id
-  );
+  const isWish = wishlistItems.some(i => i.id === product.id);
 
   const toggleWish = (e) => {
     e.stopPropagation();
 
     if (isWish) {
-      setWishlistItems((prev) =>
-        prev.filter((i) => i.id !== product.id)
-      );
+      setWishlistItems(prev => prev.filter(i => i.id !== product.id));
+      toast("Removed ❌");
     } else {
-      setWishlistItems((prev) => [...prev, product]);
+      setWishlistItems(prev => [...prev, product]);
+      toast.success("Wishlisted ❤️");
     }
   };
 
   return (
-  <div
-    onClick={goToDetail}
-    style={{
-      borderRadius: "12px",
-      padding: "15px",
-      width: "220px",
-      backgroundColor: "#fff",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-      cursor: "pointer",
-      transition: "0.3s",
-    }}
-  >
-    <img
-      src={product.image}
-      style={{
-        width: "100%",
-        height: "150px",
-        objectFit: "contain",
-        marginBottom: "10px",
-      }}
-    />
-
-    <h4 style={{
-      fontSize: "14px",
-      height: "40px",
-      overflow: "hidden"
-    }}>
-      {product.title}
-    </h4>
-
-    <p style={{
-      fontWeight: "bold",
-      margin: "10px 0"
-    }}>
-      ₹{product.price}
-    </p>
-
-    <button
-      onClick={addToCart}
-      style={{
-        width: "100%",
-        padding: "8px",
-        marginBottom: "6px",
-        backgroundColor: "#000",
-        color: "#fff",
-        border: "none",
-        borderRadius: "6px"
-      }}
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      onClick={() => navigate(`/product/${product.id}`)}
+      className="bg-white p-4 rounded shadow cursor-pointer"
     >
-      Add to Cart
-    </button>
+      <img src={product.image} className="h-40 mx-auto" />
 
-    <button
-      onClick={toggleWish}
-      style={{
-        width: "100%",
-        padding: "8px",
-        backgroundColor: isWish ? "#ff5252" : "#ff4081",
-        color: "#fff",
-        border: "none",
-        borderRadius: "6px"
-      }}
-    >
-      {isWish ? "Remove" : "Wishlist"}
-    </button>
-  </div>
-);
+      <h3>{product.title}</h3>
+      <p>₹{product.price}</p>
+
+      <button onClick={addToCart} className="bg-black text-white w-full mt-2 p-2">
+        Add to Cart
+      </button>
+
+      <button onClick={toggleWish} className="bg-pink-500 text-white w-full mt-2 p-2">
+        {isWish ? "Remove ❤️" : "Wishlist 🤍"}
+      </button>
+    </motion.div>
+  );
 }
 
 export default ProductCard;

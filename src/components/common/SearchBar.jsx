@@ -1,9 +1,10 @@
-function SearchBar() {
+function SearchBar({ setSearch }) {
   return (
-    <input 
-      type="text" 
-      placeholder="Samaan Dhundlo" 
-      style={{ padding: "10px", width: "200px" }}
+    <input
+      type="text"
+      placeholder="Search..."
+      className="border p-2 w-full"
+      onChange={(e) => setSearch(e.target.value)}
     />
   );
 }

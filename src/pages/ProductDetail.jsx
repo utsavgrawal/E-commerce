@@ -11,35 +11,20 @@ function ProductDetail({ setCartItems }) {
       .then(data => setProduct(data));
   }, [id]);
 
-  if (!product) return <p>Loading...</p>;
-
-  const handleAddToCart = () => {
-    setCartItems((prevItems) => {
-      const existing = prevItems.find(
-        (item) => item.id === product.id
-      );
-
-      if (existing) {
-        return prevItems.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...prevItems, { ...product, quantity: 1 }];
-      }
-    });
-  };
+  if (!product) return <h2>Loading...</h2>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <img src={product.image} style={{ width: "200px" }} />
-
-      <h2>{product.title}</h2>
+    <div className="p-6">
+      <img src={product.image} className="h-80" />
+      <h1>{product.title}</h1>
       <p>{product.description}</p>
-      <h3>₹{product.price}</h3>
+      <h2>₹{product.price}</h2>
 
-      <button onClick={handleAddToCart}>
+      <button
+        onClick={() =>
+          setCartItems(prev => [...prev, { ...product, quantity: 1 }])
+        }
+      >
         Add to Cart
       </button>
     </div>

@@ -3,12 +3,17 @@ import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import Navbar from "./components/layout/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import ProductDetail from "./pages/ProductDetail";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
 import Intro from "./pages/Intro";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import AdminProducts from "./pages/AdminProducts";
 
 function App() {
   const location = useLocation();
@@ -43,20 +48,25 @@ function App() {
 
   return (
     <>
-      {/* 🚫 Intro page pe navbar hide */}
-      {location.pathname !== "/" && (
-        <Navbar
-          cartCount={cartItems.length}
-          wishlistCount={wishlistItems.length}
-        />
-      )}
+      {/* 🚫 Intro / Login / Signup page pe navbar hide */}
+      {location.pathname !== "/" &&
+        location.pathname !== "/login" &&
+        location.pathname !== "/signup" && (
+          <Navbar
+            cartCount={cartItems.length}
+            wishlistCount={wishlistItems.length}
+          />
+        )}
 
       {/* 🎬 Page animation wrapper */}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-
           {/* 🔥 Intro Page */}
           <Route path="/" element={<Intro />} />
+
+          {/* 🔐 Auth Pages */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
           {/* 🏠 Home */}
           <Route
@@ -74,43 +84,59 @@ function App() {
           <Route
             path="/cart"
             element={
-              <Cart
-                cartItems={cartItems}
-                setCartItems={setCartItems}
-              />
+              <Cart cartItems={cartItems} setCartItems={setCartItems} />
             }
           />
 
           {/* 📦 Product Detail */}
           <Route
             path="/product/:id"
-            element={
-              <ProductDetail
-                setCartItems={setCartItems}
-              />
-            }
+            element={<ProductDetail setCartItems={setCartItems} />}
           />
 
-          {/* ❤️ Wishlist */}
+          {/* ❤️ Wishlist Protected */}
           <Route
             path="/wishlist"
             element={
-              <Wishlist
-                wishlistItems={wishlistItems}
-                setWishlistItems={setWishlistItems}
-                setCartItems={setCartItems}
-              />
+              <ProtectedRoute>
+                <Wishlist
+                  wishlistItems={wishlistItems}
+                  setWishlistItems={setWishlistItems}
+                  setCartItems={setCartItems}
+                />
+              </ProtectedRoute>
             }
           />
 
-          {/* 💳 Checkout */}
+          {/* 💳 Checkout Protected */}
           <Route
             path="/checkout"
             element={
-              <Checkout cartItems={cartItems} />
+              <ProtectedRoute>
+                <Checkout cartItems={cartItems} />
+              </ProtectedRoute>
             }
           />
 
+          {/* 🛠️ Admin Products Protected */}
+          <Route
+            path="/admin/products"
+            element={
+              <ProtectedRoute>
+                <AdminProducts />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ❌ 404 */}
+          <Route
+            path="*"
+            element={
+              <h1 className="p-10 text-center text-2xl font-bold">
+                404 - Page Not Found
+              </h1>
+            }
+          />
         </Routes>
       </AnimatePresence>
     </>

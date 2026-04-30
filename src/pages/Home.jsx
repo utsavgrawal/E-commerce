@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import ProductCard from "../components/common/ProductCard";
 import SearchBar from "../components/common/SearchBar";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function Home({ setCartItems, wishlistItems, setWishlistItems }) {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   // 📦 FETCH PRODUCTS
   useEffect(() => {
@@ -28,7 +32,6 @@ function Home({ setCartItems, wishlistItems, setWishlistItems }) {
     p.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  // ⏳ LOADING UI
   if (loading) {
     return (
       <div className="p-10 text-center text-gray-400 animate-pulse">
@@ -37,7 +40,6 @@ function Home({ setCartItems, wishlistItems, setWishlistItems }) {
     );
   }
 
-  // ❌ ERROR UI
   if (error) {
     return (
       <div className="p-10 text-center text-red-400">
@@ -54,13 +56,25 @@ function Home({ setCartItems, wishlistItems, setWishlistItems }) {
     >
 
       {/* 🔥 HEADER */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Explore Products 🔥
-        </h1>
-        <p className="text-gray-400">
-          Find the best deals across categories
-        </p>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-1">
+            Explore Products 🔥
+          </h1>
+          <p className="text-gray-400">
+            Find the best deals across categories
+          </p>
+        </div>
+
+        {/* 🔥 LOGIN BUTTON (Home ki jagah) */}
+        {!isLoggedIn && (
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition"
+          >
+            Login
+          </button>
+        )}
       </div>
 
       {/* 🔍 SEARCH */}
@@ -90,7 +104,6 @@ function Home({ setCartItems, wishlistItems, setWishlistItems }) {
           ))}
         </div>
       )}
-
     </motion.div>
   );
 }

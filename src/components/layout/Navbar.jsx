@@ -1,37 +1,52 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar({ cartCount = 0, wishlistCount = 0 }) {
-  const location = useLocation();
+  const navigate = useNavigate();
 
-  const linkStyle = (path) =>
-    `transition ${
-      location.pathname === path
-        ? "text-pink-500 font-semibold"
-        : "text-gray-300 hover:text-pink-400"
-    }`;
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    navigate("/login");
+  };
 
   return (
-    <div className="flex justify-between items-center px-6 py-4 bg-black text-white shadow-md sticky top-0 z-50 border-b border-gray-800">
+    <div className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
 
-      {/* 🔥 LOGO */}
-      <Link to="/home" className="text-2xl font-bold text-pink-500">
-        MyStore
-      </Link>
+      {/* 🔥 LEFT SIDE (LOGO) */}
+      <div className="text-xl font-bold cursor-pointer">
+        MyStore 🛍️
+      </div>
 
-      {/* 🔗 LINKS */}
-      <div className="flex items-center gap-6 text-lg">
+      {/* 🔥 RIGHT SIDE */}
+      <div className="flex items-center gap-5">
 
-        <Link to="/home" className={linkStyle("/home")}>
-          Home
+        <Link to="/home">Products</Link>
+
+        <Link to="/cart">
+          Cart ({cartCount})
         </Link>
 
-        <Link to="/wishlist" className={linkStyle("/wishlist")}>
-          ❤️ <span className="ml-1">{wishlistCount}</span>
+        <Link to="/wishlist">
+          Wishlist ({wishlistCount})
         </Link>
 
-        <Link to="/cart" className={linkStyle("/cart")}>
-          🛒 <span className="ml-1">{cartCount}</span>
-        </Link>
+        {/* 🔥 LOGIN / LOGOUT */}
+        {isLoggedIn ? (
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 px-4 py-1 rounded hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-blue-500 px-4 py-1 rounded hover:bg-blue-600 transition"
+          >
+            Login
+          </button>
+        )}
 
       </div>
     </div>
